@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'myApp';
+  stepsList : any[]=[
+    {stepName : 'Basic Details', isComplete : false},
+    {stepName : 'Skills', isComplete : false},
+    {stepName : 'Experience',isComplete : false}
+  ]
 }
