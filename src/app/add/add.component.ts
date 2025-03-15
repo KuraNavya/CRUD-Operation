@@ -157,4 +157,104 @@ export class AddComponent implements OnInit {
       projectsWorkedOn: ['']
     }))
   }
+
+  saveEmployee(){
+    console.log(this.employeeForm);
+    this.isFormSubmitted = true;
+    this.employeeForm.controls['userName'].setValue(
+      this.employeeForm.get('empName')?.value
+    );
+
+    this.emp_serv.addEmployee(this.employeeForm.value).subscribe((res:any) =>{
+      if(res.result){
+        alert('Employee created successfully');
+        this.router.navigate([""])
+      }
+      else{
+        alert(res.message)
+      }
+    })
+  }
+
+  updateEmployee(){
+    let data = Object.assign(this.employeeForm.value, {empId: this.editEmployee.empId })
+    console.log(data);
+    this.isFormSubmitted = true;
+
+    this.employeeForm.controls['userName'].setValue(
+      this.employeeForm.get('empName')?.valueChanges
+    );
+
+    this.emp_serv.updateEmployee(data).subscribe((res:any)=>{
+      if(res.result){
+        alert('Employee data updated successfully')
+      }else{
+        alert(res.message)
+      }
+    })
+
+  }
+
+
+  loadDesignation(){
+    this.emp_serv.getDesignation().subscribe((res:any) =>{
+      this.designationList = res.data;  // we can use async pipe for storing
+    })
+  }
+
+
+  loadRoles(){
+    this.emp_serv.getRoles().subscribe((res:any)=>{
+      this.roleList = res.data;
+    })
+  }
+
+
+  addNew(){
+    this.isCreateView = true;
+  }
+
+  setActiveStep(activeStep:any){
+    this.activeStep = activeStep;
+  }
+
+  gotoStep1(){
+    const currentStep = this.stepsList.find(m => m.stepName === this.activeStep.stepName);
+    currentStep.isComplete = false;
+    this.activeStep = this.stepsList[0];
+    this.stepperCompletionValue = 0;
+  }
+
+
+  
+  gotoStep2(){
+    const currentStep = this.stepsList.find(m => m.stepName === this.activeStep.stepName);
+    currentStep.isComplete = false;
+    this.activeStep = this.stepsList[1];
+    this.stepperCompletionValue = 50;
+  }
+
+
+   
+  gotoStep3(){
+    const currentStep = this.stepsList.find(m => m.stepName === this.activeStep.stepName);
+    currentStep.isComplete = false;
+    this.activeStep = this.stepsList[2];
+    this.stepperCompletionValue = 100;
+  }
+
+
+  gotoStep2FromStep3(){
+    const currentStep = this.stepsList.find(m => m.stepName === this.activeStep.stepName);
+    currentStep.isComplete = false;
+    this.activeStep = this.stepsList[1];
+    this.stepperCompletionValue = 50;
+  }
+   
+  ngOnDestroy(){
+    console.log("Destroy");
+    this.editEmployee = '';
+  }
+
+  
 }
